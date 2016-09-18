@@ -1,16 +1,24 @@
-angular.module('todoController', [])
+angular.module('todoController', ['ng-bootstrap-datepicker'])
 
 	// inject the Todo service factory into our controller
 	.controller('mainController', ['$scope','$http','Todos', function($scope, $http, Todos) {
 		$scope.formData = {};
 		$scope.loading = true;
 
+		// Datepicker configuration
+		$scope.datepickerOptions = {
+			format: 'yyyy-mm-dd',
+    	language: 'fr',
+    	autoclose: true,
+    	weekStart: 0
+    };
+
 		// GET =====================================================================
 		// when landing on the page, get all todos and show them
 		// use the service to get all the todos
 		Todos.get()
 			.success(function(data) {
-				$scope.todos = data;
+				$scope.todos = data || [];
 				$scope.loading = false;
 			});
 

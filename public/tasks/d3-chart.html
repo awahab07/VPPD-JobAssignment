@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.chart {
+  position: relative;
+}
+
+.chart div {
+  font: 10px sans-serif;
+  background-color: steelblue;
+  text-align: center;
+  padding: 3px;
+  margin: 1px;
+  color: white;
+  position: absolute;
+}
+
+</style>
+<div class="chart"></div>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+
+// Setting fixed bar width and chart height, this will help to spread data values in appropriate ranges
+var barWidth = 14,
+    chartHeight = 420,
+    margin = 2;
+
+var data = [4, 8, 15, 16, 23, 42];
+
+var chartWidth = barWidth * data.length;
+
+// Using a vertical range instead of horizontal
+var y = d3.scale.linear()
+    .domain([0, d3.max(data)])
+    .range([chartHeight, 0]);
+
+var chart = d3.select(".chart")
+  .style("width", chartWidth + "px")
+  .style("height", chartHeight + "px");
+  
+var barDivs = chart.selectAll("div")
+    .data(data)
+    .enter()
+    .append("div");
+    
+// All 'width', 'height', 'top' and 'left' style attrs are important to set for Absolutely Positioned DOM elements
+  barDivs
+    .style("width", barWidth - margin + "px")
+    .style("height", function(d) { return chartHeight - y(d) + "px"; })
+    .style("top", function(d) { return y(d) + "px"; })
+    .style("left", function(d, i) { return i * (barWidth + 3 * margin) + "px"; })
+    .text(function(d) { return d; });
+
+</script>
